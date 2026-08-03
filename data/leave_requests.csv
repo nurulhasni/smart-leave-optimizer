@@ -1,0 +1,76 @@
+request_id,employee_id,name,department,start_date,end_date,duration_days,submit_date,waiting_days,seniority,reason
+REQ001,EMP020,Jessica Laksana,Product,2026-08-25,2026-08-28,4,2026-07-30,2,8,Mudik & Acara Daerah
+REQ002,EMP020,Jessica Laksana,Product,2026-08-07,2026-08-07,1,2026-07-16,16,8,Acara Pernikahan Keluarga
+REQ003,EMP037,Lestari Mahendra,HR,2026-08-22,2026-08-23,2,2026-07-27,5,5,Urusan Dokumen Pribadi
+REQ004,EMP006,Maya Wahyudi,Engineering,2026-08-10,2026-08-12,3,2026-07-15,17,4,Renovasi Rumah
+REQ005,EMP004,Budi Pratama,Engineering,2026-08-22,2026-08-23,2,2026-07-22,10,4,Renovasi Rumah
+REQ006,EMP015,Citra Laksana,Product,2026-08-25,2026-08-27,3,2026-07-17,15,2,Urusan Dokumen Pribadi
+REQ007,EMP027,Kurniawan Wahyudi,Finance,2026-08-12,2026-08-13,2,2026-07-31,1,10,Mudik & Acara Daerah
+REQ008,EMP026,Joko Suryani,Finance,2026-08-05,2026-08-05,1,2026-07-30,2,4,Mudik & Acara Daerah
+REQ009,EMP032,Yusuf Utomo,Operations,2026-08-10,2026-08-13,4,2026-07-15,17,8,Mudik & Acara Daerah
+REQ010,EMP018,Wahyu Kusuma,Product,2026-08-25,2026-08-27,3,2026-07-13,19,5,Urusan Dokumen Pribadi
+REQ011,EMP037,Lestari Mahendra,HR,2026-08-25,2026-08-29,5,2026-07-28,4,5,Acara Pernikahan Keluarga
+REQ012,EMP008,Kiki Suharto,Engineering,2026-08-16,2026-08-19,4,2026-07-18,14,5,Urusan Dokumen Pribadi
+REQ013,EMP038,Hani Ramadhan,HR,2026-08-06,2026-08-06,1,2026-07-30,2,3,Renovasi Rumah
+REQ014,EMP023,Citra Nugraha,Finance,2026-08-30,2026-08-30,1,2026-07-24,8,5,Mudik & Acara Daerah
+REQ015,EMP009,Joko Kusuma,Engineering,2026-08-27,2026-08-29,3,2026-07-26,6,2,Cuti Tahunan Impulsif
+REQ016,EMP011,Wahyu Ramadhan,Engineering,2026-08-07,2026-08-10,4,2026-07-14,18,1,Acara Pernikahan Keluarga
+REQ017,EMP010,Fajar Utomo,Engineering,2026-08-11,2026-08-12,2,2026-07-26,6,6,Renovasi Rumah
+REQ018,EMP030,Fajar Santoso,Operations,2026-08-11,2026-08-14,4,2026-07-30,2,3,Sakit / Medical Checkup
+REQ019,EMP008,Kiki Suharto,Engineering,2026-08-27,2026-08-30,4,2026-07-22,10,5,Renovasi Rumah
+REQ020,EMP013,Fajar Wahyudi,Product,2026-08-28,2026-08-31,4,2026-07-27,5,10,Mudik & Acara Daerah
+REQ021,EMP021,Yusuf Suryani,Finance,2026-08-12,2026-08-13,2,2026-07-30,2,9,Liburan Keluarga
+REQ022,EMP032,Yusuf Utomo,Operations,2026-08-21,2026-08-22,2,2026-07-30,2,8,Acara Pernikahan Keluarga
+REQ023,EMP020,Jessica Laksana,Product,2026-08-07,2026-08-07,1,2026-07-24,8,8,Renovasi Rumah
+REQ024,EMP039,Xena Wibowo,HR,2026-08-14,2026-08-15,2,2026-07-29,3,9,Renovasi Rumah
+REQ025,EMP005,Hani Ramadhan,Engineering,2026-08-23,2026-08-25,3,2026-07-23,9,9,Mudik & Acara Daerah
+REQ026,EMP019,Eko Ramadhan,Product,2026-08-15,2026-08-16,2,2026-07-23,9,3,Renovasi Rumah
+REQ027,EMP034,Hendra Wahyudi,Operations,2026-08-26,2026-08-30,5,2026-07-29,3,6,Liburan Keluarga
+REQ028,EMP026,Joko Suryani,Finance,2026-08-23,2026-08-23,1,2026-07-29,3,4,Mudik & Acara Daerah
+REQ029,EMP034,Hendra Wahyudi,Operations,2026-08-09,2026-08-11,3,2026-07-29,3,6,Mudik & Acara Daerah
+REQ030,EMP022,Oktavia Nugraha,Finance,2026-08-14,2026-08-18,5,2026-07-22,10,4,Liburan Keluarga
+REQ031,EMP015,Citra Laksana,Product,2026-08-22,2026-08-24,3,2026-07-28,4,2,Sakit / Medical Checkup
+REQ032,EMP003,Fajar Firmansyah,Engineering,2026-08-12,2026-08-14,3,2026-07-22,10,1,Mudik & Acara Daerah
+REQ033,EMP001,Hendra Wijaya,Engineering,2026-08-11,2026-08-13,3,2026-07-15,17,4,Urusan Dokumen Pribadi
+REQ034,EMP022,Oktavia Nugraha,Finance,2026-08-13,2026-08-14,2,2026-07-23,9,4,Liburan Keluarga
+REQ035,EMP024,Eko Kusuma,Finance,2026-08-11,2026-08-14,4,2026-07-17,15,6,Renovasi Rumah
+REQ036,EMP026,Joko Suryani,Finance,2026-08-08,2026-08-08,1,2026-07-27,5,4,Liburan Keluarga
+REQ037,EMP008,Kiki Suharto,Engineering,2026-08-23,2026-08-24,2,2026-07-18,14,5,Sakit / Medical Checkup
+REQ038,EMP034,Hendra Wahyudi,Operations,2026-08-26,2026-08-27,2,2026-07-25,7,6,Mudik & Acara Daerah
+REQ039,EMP035,Hendra Gunawan,Operations,2026-08-16,2026-08-19,4,2026-07-12,20,3,Sakit / Medical Checkup
+REQ040,EMP010,Fajar Utomo,Engineering,2026-08-12,2026-08-13,2,2026-07-26,6,6,Renovasi Rumah
+REQ041,EMP007,Deni Firmansyah,Engineering,2026-08-25,2026-08-29,5,2026-07-23,9,1,Sakit / Medical Checkup
+REQ042,EMP002,Oktavia Saputra,Engineering,2026-08-08,2026-08-11,4,2026-07-30,2,9,Urusan Dokumen Pribadi
+REQ043,EMP008,Kiki Suharto,Engineering,2026-08-26,2026-08-29,4,2026-07-24,8,5,Mudik & Acara Daerah
+REQ044,EMP029,Oktavia Saputra,Operations,2026-08-12,2026-08-16,5,2026-07-23,9,8,Acara Pernikahan Keluarga
+REQ045,EMP040,Andi Ramadhan,HR,2026-08-13,2026-08-15,3,2026-07-15,17,8,Renovasi Rumah
+REQ046,EMP025,Nugroho Setiawan,Finance,2026-08-22,2026-08-24,3,2026-07-31,1,8,Acara Pernikahan Keluarga
+REQ047,EMP040,Andi Ramadhan,HR,2026-08-13,2026-08-14,2,2026-07-13,19,8,Cuti Tahunan Impulsif
+REQ048,EMP026,Joko Suryani,Finance,2026-08-26,2026-08-29,4,2026-07-18,14,4,Acara Pernikahan Keluarga
+REQ049,EMP040,Andi Ramadhan,HR,2026-08-10,2026-08-13,4,2026-07-18,14,8,Liburan Keluarga
+REQ050,EMP033,Irfan Suryani,Operations,2026-08-30,2026-08-31,2,2026-07-20,12,1,Renovasi Rumah
+REQ051,EMP027,Kurniawan Wahyudi,Finance,2026-08-24,2026-08-27,4,2026-07-22,10,10,Cuti Tahunan Impulsif
+REQ052,EMP036,Eka Wijaya,HR,2026-08-15,2026-08-18,4,2026-07-22,10,9,Sakit / Medical Checkup
+REQ053,EMP005,Hani Ramadhan,Engineering,2026-08-26,2026-08-28,3,2026-07-19,13,9,Liburan Keluarga
+REQ054,EMP010,Fajar Utomo,Engineering,2026-08-14,2026-08-18,5,2026-07-12,20,6,Wisuda Anggota Keluarga
+REQ055,EMP020,Jessica Laksana,Product,2026-08-19,2026-08-20,2,2026-07-15,17,8,Urusan Dokumen Pribadi
+REQ056,EMP018,Wahyu Kusuma,Product,2026-08-30,2026-08-31,2,2026-07-29,3,5,Cuti Tahunan Impulsif
+REQ057,EMP033,Irfan Suryani,Operations,2026-08-25,2026-08-27,3,2026-07-29,3,1,Mudik & Acara Daerah
+REQ058,EMP026,Joko Suryani,Finance,2026-08-12,2026-08-13,2,2026-07-27,5,4,Liburan Keluarga
+REQ059,EMP020,Jessica Laksana,Product,2026-08-27,2026-08-28,2,2026-07-18,14,8,Mudik & Acara Daerah
+REQ060,EMP019,Eko Ramadhan,Product,2026-08-17,2026-08-20,4,2026-07-19,13,3,Mudik & Acara Daerah
+REQ061,EMP018,Wahyu Kusuma,Product,2026-08-13,2026-08-14,2,2026-07-24,8,5,Sakit / Medical Checkup
+REQ062,EMP015,Citra Laksana,Product,2026-08-27,2026-08-30,4,2026-07-30,2,2,Mudik & Acara Daerah
+REQ063,EMP005,Hani Ramadhan,Engineering,2026-08-08,2026-08-11,4,2026-07-27,5,9,Urusan Dokumen Pribadi
+REQ064,EMP035,Hendra Gunawan,Operations,2026-08-22,2026-08-24,3,2026-07-17,15,3,Renovasi Rumah
+REQ065,EMP010,Fajar Utomo,Engineering,2026-08-22,2026-08-25,4,2026-07-26,6,6,Urusan Dokumen Pribadi
+REQ066,EMP006,Maya Wahyudi,Engineering,2026-08-29,2026-08-30,2,2026-07-23,9,4,Urusan Dokumen Pribadi
+REQ067,EMP021,Yusuf Suryani,Finance,2026-08-13,2026-08-16,4,2026-07-29,3,9,Cuti Tahunan Impulsif
+REQ068,EMP020,Jessica Laksana,Product,2026-08-24,2026-08-27,4,2026-07-27,5,8,Sakit / Medical Checkup
+REQ069,EMP021,Yusuf Suryani,Finance,2026-08-10,2026-08-12,3,2026-07-18,14,9,Renovasi Rumah
+REQ070,EMP001,Hendra Wijaya,Engineering,2026-08-24,2026-08-28,5,2026-07-25,7,4,Renovasi Rumah
+REQ071,EMP039,Xena Wibowo,HR,2026-08-13,2026-08-17,5,2026-07-31,1,9,Wisuda Anggota Keluarga
+REQ072,EMP014,Xena Firmansyah,Product,2026-08-25,2026-08-29,5,2026-07-16,16,2,Mudik & Acara Daerah
+REQ073,EMP027,Kurniawan Wahyudi,Finance,2026-08-27,2026-08-28,2,2026-07-21,11,10,Renovasi Rumah
+REQ074,EMP022,Oktavia Nugraha,Finance,2026-08-19,2026-08-20,2,2026-07-12,20,4,Liburan Keluarga
+REQ075,EMP026,Joko Suryani,Finance,2026-08-23,2026-08-23,1,2026-07-29,3,4,Renovasi Rumah

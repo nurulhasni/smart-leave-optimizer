@@ -1,0 +1,6 @@
+department,total_staff,min_staff_pct,min_staff,max_on_leave
+Engineering,12,0.7,8,4
+Product,8,0.7,6,2
+Finance,7,0.7,5,2
+Operations,8,0.7,6,2
+HR,5,0.7,4,1
