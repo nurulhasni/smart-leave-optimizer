@@ -35,6 +35,16 @@ st.markdown("""
         background-color: #F4EFE6 !important;
         border-right: 1px solid #E6DEC8;
     }
+    [data-testid="stSidebar"] * {
+        color: #2D241E !important;
+    }
+    [data-testid="stSidebar"] label,
+    [data-testid="stSidebar"] .stMarkdown,
+    [data-testid="stSidebar"] h1,
+    [data-testid="stSidebar"] h2,
+    [data-testid="stSidebar"] h3 {
+        color: #2D241E !important;
+    }
     
     /* Header Gradient Banner - Rich Warm Terracotta / Espresso / Warm Amber */
     .main-header {
