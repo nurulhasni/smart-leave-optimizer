@@ -2,6 +2,7 @@ import time
 import pandas as pd
 from datetime import datetime, timedelta
 import pulp
+from lang import t
 
 def date_range(start_date, end_date):
     """Generates a list of datetime objects from start_date to end_date inclusive."""
@@ -30,7 +31,7 @@ def build_approved_leave_by_day(requests_df: pd.DataFrame) -> dict:
             by_day.setdefault(key, []).append(req["request_id"])
     return by_day
 
-def check_quota_reason(request_row, employee_row, requests_df) -> str | None:
+def check_quota_reason(request_row, employee_row, requests_df, lang: str = "id") -> str | None:
     """
     Cek apakah request ini kalau (secara hipotetis) diapprove akan melebihi
     sisa quota pegawai tsb, dihitung dari total durasi SEMUA request approved
@@ -43,13 +44,10 @@ def check_quota_reason(request_row, employee_row, requests_df) -> str | None:
     used_days = approved_for_emp["duration_days"].sum()
     remaining = employee_row["quota_days"] - used_days
     if request_row["duration_days"] > remaining:
-        return (
-            f"Quota cuti tidak mencukupi: sisa quota {remaining} hari, "
-            f"request ini membutuhkan {request_row['duration_days']} hari."
-        )
+        return t("quota_reason", lang, remaining=remaining, duration=request_row["duration_days"])
     return None
 
-def check_staffing_reason(request_row, departments_df, approved_by_day: dict) -> str | None:
+def check_staffing_reason(request_row, departments_df, approved_by_day: dict, lang: str = "id") -> str | None:
     """
     Cek tanggal mana dalam rentang request ini yang staffing dept-nya sudah
     penuh oleh request lain yang approved, lalu sebut siapa yang 'menang'
@@ -72,16 +70,25 @@ def check_staffing_reason(request_row, departments_df, approved_by_day: dict) ->
     if not blocking_dates:
         return None
 
-    worst_date_str, winners = max(blocking_dates, key=lambda t: len(t[1]))
-    return (
-        f"Kapasitas cuti Dept {dept} penuh pada tanggal {worst_date_str} "
-        f"(maksimum {max_on_leave} orang cuti bersamaan agar min staff {dept_row['min_staff']} terpenuhi). "
-        f"Slot terisi oleh {len(winners)} request berprioritas lebih tinggi: "
-        f"{', '.join(map(str, winners[:3]))}{'...' if len(winners) > 3 else ''}. "
-        f"Total {len(blocking_dates)} hari dalam request ini melanggar batas staffing."
+    worst_date_str, winners = max(blocking_dates, key=lambda item: len(item[1]))
+    winners_list = ', '.join(map(str, winners[:3])) + ('...' if len(winners) > 3 else '')
+    return t(
+        "staffing_reason", lang,
+        dept=dept,
+        date=worst_date_str,
+        max_on_leave=max_on_leave,
+        min_staff=dept_row["min_staff"],
+        n_winners=len(winners),
+        winners_list=winners_list,
+        n_blocking=len(blocking_dates)
     )
 
-def explain_all_rejections(requests_df: pd.DataFrame, employees_df: pd.DataFrame, departments_df: pd.DataFrame) -> pd.DataFrame:
+def explain_all_rejections(
+    requests_df: pd.DataFrame,
+    employees_df: pd.DataFrame,
+    departments_df: pd.DataFrame,
+    lang: str = "id"
+) -> pd.DataFrame:
     """
     Entry point utama explainability. Menambahkan kolom 'rejection_reason'
     ke requests_df untuk semua request dengan approved == 0.
@@ -97,19 +104,15 @@ def explain_all_rejections(requests_df: pd.DataFrame, employees_df: pd.DataFrame
         emp_row = emp_match.iloc[0]
 
         # 1. Cek quota dulu
-        reason = check_quota_reason(req, emp_row, requests_df)
+        reason = check_quota_reason(req, emp_row, requests_df, lang=lang)
 
         # 2. Kalau bukan quota, cek staffing
         if reason is None:
-            reason = check_staffing_reason(req, departments_df, approved_by_day)
+            reason = check_staffing_reason(req, departments_df, approved_by_day, lang=lang)
 
         # 3. Fallback
         if reason is None:
-            reason = (
-                "Tidak disetujui karena objective function ILP memprioritaskan "
-                "request lain dengan kombinasi waiting_days & seniority lebih tinggi "
-                "pada slot kapasitas departemen yang terbatas."
-            )
+            reason = t("fallback_reason", lang)
 
         reasons[req["request_id"]] = reason
 
@@ -122,7 +125,8 @@ def solve_leave_optimization(
     departments_df: pd.DataFrame,
     alpha: float = 1.0,
     beta: float = 1.5,
-    custom_min_staff_pct: float = None
+    custom_min_staff_pct: float = None,
+    lang: str = "id"
 ) -> dict:
     """
     Solves the ILP Leave Approval Optimization Problem using PuLP.
@@ -215,7 +219,7 @@ def solve_leave_optimization(
     req_df["approved"] = req_df["request_id"].map(approved_map)
     
     # Generate explainability reasons for rejected requests
-    req_df = explain_all_rejections(req_df, emp_df, dept_df)
+    req_df = explain_all_rejections(req_df, emp_df, dept_df, lang=lang)
     
     return {
         "requests_df": req_df,
@@ -233,7 +237,8 @@ def simulate_scenario(
     departments_df: pd.DataFrame,
     alpha: float = 1.0,
     beta: float = 1.5,
-    custom_min_staff_pct: float = None
+    custom_min_staff_pct: float = None,
+    lang: str = "id"
 ) -> dict:
     """
     Simulates forcing approval of a specific request ID (x_target = 1)
@@ -242,21 +247,16 @@ def simulate_scenario(
     req_df = requests_df.copy()
     target_row = req_df[req_df["request_id"] == target_request_id]
     if target_row.empty:
-        return {"feasible": False, "message": f"Request ID {target_request_id} tidak ditemukan."}
+        return {"feasible": False, "message": t("request_not_found", lang, rid=target_request_id)}
         
     req_row = target_row.iloc[0]
     emp_id = req_row["employee_id"]
     dept = req_row["department"]
     
-    # 1. Run optimization with forced x_target = 1
-    # We add a high fixed constraint x_target == 1
-    req_df_copy = req_df.copy()
+    # Run baseline optimization
+    baseline = solve_leave_optimization(req_df, employees_df, departments_df, alpha, beta, custom_min_staff_pct, lang=lang)
     
-    # Solve standard first
-    baseline = solve_leave_optimization(req_df, employees_df, departments_df, alpha, beta, custom_min_staff_pct)
-    
-    # Now solve scenario with forced x_target = 1
-    start_time = time.time()
+    # Solve scenario with forced x_target = 1
     dept_df = departments_df.copy()
     if custom_min_staff_pct is not None:
         dept_df["min_staff_pct"] = custom_min_staff_pct
@@ -264,26 +264,26 @@ def simulate_scenario(
         dept_df["max_on_leave"] = dept_df["total_staff"] - dept_df["min_staff"]
         
     prob = pulp.LpProblem("Scenario_Simulation", pulp.LpMaximize)
-    x_vars = {r_id: pulp.LpVariable(f"x_{r_id}", cat=pulp.LpBinary) for r_id in req_df_copy["request_id"]}
+    x_vars = {r_id: pulp.LpVariable(f"x_{r_id}", cat=pulp.LpBinary) for r_id in req_df["request_id"]}
     
     # Force target request = 1
     prob += (x_vars[target_request_id] == 1, f"Force_Approve_{target_request_id}")
     
     # Objective Function
-    req_df_copy["weight"] = alpha * req_df_copy["waiting_days"] + beta * req_df_copy["seniority"]
-    prob += pulp.lpSum([req_df_copy.loc[req_df_copy["request_id"] == r_id, "weight"].values[0] * x_vars[r_id] for r_id in x_vars])
+    req_df["weight"] = alpha * req_df["waiting_days"] + beta * req_df["seniority"]
+    prob += pulp.lpSum([req_df.loc[req_df["request_id"] == r_id, "weight"].values[0] * x_vars[r_id] for r_id in x_vars])
     
     # Quota constraints
     for _, emp in employees_df.iterrows():
         e_id = emp["employee_id"]
         quota = emp["quota_days"]
-        emp_reqs = req_df_copy[req_df_copy["employee_id"] == e_id]
+        emp_reqs = req_df[req_df["employee_id"] == e_id]
         if not emp_reqs.empty:
             prob += (pulp.lpSum([row["duration_days"] * x_vars[row["request_id"]] for _, row in emp_reqs.iterrows()]) <= quota)
             
     # Staffing constraints
     all_dates = set()
-    for _, row in req_df_copy.iterrows():
+    for _, row in req_df.iterrows():
         s_date = datetime.strptime(row["start_date"], "%Y-%m-%d") if isinstance(row["start_date"], str) else row["start_date"]
         e_date = datetime.strptime(row["end_date"], "%Y-%m-%d") if isinstance(row["end_date"], str) else row["end_date"]
         for d in date_range(s_date, e_date):
@@ -292,7 +292,7 @@ def simulate_scenario(
     for _, dept_row in dept_df.iterrows():
         d_name = dept_row["department"]
         max_on_leave = dept_row["total_staff"] - dept_row["min_staff"]
-        dept_reqs = req_df_copy[req_df_copy["department"] == d_name]
+        dept_reqs = req_df[req_df["department"] == d_name]
         
         for d_str in all_dates:
             target_date = datetime.strptime(d_str, "%Y-%m-%d")
@@ -305,35 +305,26 @@ def simulate_scenario(
     prob.solve(solver)
     
     if prob.status != pulp.LpStatusOptimal:
-        # Infeasible: Forced approval strictly violates a constraint
-        # Determine which constraint broke
-        # Check quota
         emp_row = employees_df[employees_df["employee_id"] == emp_id].iloc[0]
         if req_row["duration_days"] > emp_row["quota_days"]:
-            msg = f"❌ **TIDAK AMAN (Infeasible)**: Request {target_request_id} ({req_row['name']}) melebihi total quota cuti pegawai ({req_row['duration_days']} hari > {emp_row['quota_days']} hari)."
+            msg = t("infeasible_quota", lang, rid=target_request_id, name=req_row['name'], duration=req_row['duration_days'], quota=emp_row['quota_days'])
         else:
-            msg = f"❌ **TIDAK AMAN (Infeasible)**: Menyetujui request {target_request_id} ({req_row['name']}) melanggar batas minimum staffing Departemen {dept} pada periode {req_row['start_date']} s/d {req_row['end_date']}."
+            msg = t("infeasible_staffing", lang, rid=target_request_id, name=req_row['name'], dept=dept, start=req_row['start_date'], end=req_row['end_date'])
         return {"feasible": False, "status": "Infeasible", "message": msg, "target_request": req_row.to_dict()}
     else:
-        # Feasible scenario
         scen_approved_map = {r_id: (1 if var.varValue > 0.5 else 0) for r_id, var in x_vars.items()}
-        req_df_copy["approved"] = req_df_copy["request_id"].map(scen_approved_map)
+        req_df["approved"] = req_df["request_id"].map(scen_approved_map)
         
-        # Compare baseline vs scenario approvals
         base_approved = set(baseline["requests_df"][baseline["requests_df"]["approved"] == 1]["request_id"])
-        scen_approved = set(req_df_copy[req_df_copy["approved"] == 1]["request_id"])
+        scen_approved = set(req_df[req_df["approved"] == 1]["request_id"])
         
         bumped_out = list(base_approved - scen_approved)
         
         if bumped_out:
-            bumped_names = req_df[req_df["request_id"].isin(bumped_out)]["name"].tolist()
-            msg = (
-                f"⚠️ **AMAN DENGAN IMPACT**: Request {target_request_id} ({req_row['name']}) BISA disetujui, "
-                f"namun menggeser (membatalkan) {len(bumped_out)} request lain yang sebelumnya disetujui: "
-                f"{', '.join(bumped_names)}."
-            )
+            bumped_names = requests_df[requests_df["request_id"].isin(bumped_out)]["name"].tolist()
+            msg = t("feasible_with_impact", lang, rid=target_request_id, name=req_row['name'], n_bumped=len(bumped_out), bumped_names=', '.join(bumped_names))
         else:
-            msg = f"✅ **SANGAT AMAN**: Request {target_request_id} ({req_row['name']}) dapat disetujui tanpa mengganggu staffing maupun request pegawai lain!"
+            msg = t("feasible_safe", lang, rid=target_request_id, name=req_row['name'])
             
         return {
             "feasible": True,
